@@ -2,14 +2,14 @@
 
 ## Motivacija
 
-- u dosta slucaja, odgovaralo bi nam da mozemo da prebacimo nase assete sa jednog chaina na drugi
-    - problem u tome je sto chainovi nisu sposobni da medjusobno komuniciraju
+- u dosta slučaja, odgovaralo bi nam da možemo da prebacimo nase assete sa jednog chaina na drugi
+    - problem u tome je što chainovi nisu sposobni da medjusobno komuniciraju
 
-- Landing protokoli (AAVE) imaju bolji interest u slucaju odredjenih coina
+- Landing protokoli (AAVE) imaju bolji interest u slučaju određenih coina
     - ETH: 0.5%
     - Polygon 3%
 
-- Odredjeni chainovi imaju mnogo jeftinije i brze transakcije (u vecini slucaja u ustrb bezbednosti)
+- Odredjeni chainovi imaju mnogo jeftinije i brze transakcije (u vecini slucaja na ustrb bezbednosti)
     - sta mozemo uraditi sa 2$?
         - 1 transakcija na Etherium
         - 50k polygon transakcija
@@ -30,9 +30,9 @@
             - on se menja kroz contract ili metamask
 
 - valutu koju imamo saljemo notaru/contractu koji ih zamrzavaju
-- zatim oni okidaju mintovanje novih njima ekvivalentnih tokena na drugom chainu
-    - kada se citava migracija izvrsi, zamrznuti tokeni na prvom chainu se unistavaju ???
-        - ???postoji li mogucnost ipak da se reedemuju???
+- zatim oni okidaju mintovanje novih njima ekvivalentnih tokena na drugom chainu ili ih izvlace iz njihovog liquidity poola
+    - kada se citava migracija izvrsi, zamrznuti tokeni na prvom chainu se unistavaju
+        - u slucaju da se tokeni reedemuju, wrapovani tokeni se spaljuju
 
 - notar garantuje ekvivalentnost izmedju originalnog i wrapovanog tokena
     - postoje pokusaji izbegavanja ovog vida centralizacije
@@ -42,16 +42,13 @@
 - Implementiran je kao:
     - offchain aplikacija
     - contract na trecem chainu
-- ima liquidity poolove na oba chaina ???
-??? Kod liquidity poola, da li se i dalje dobija WETH u Polygonu ili se dobija Polygon native coin???
-???Kako radi ta liquidity pool metoda???
+- ima liquidity poolove na oba chaina 
 - informacije o zahtevima za transakciju dobija citanjem logova ili pollingom
     - polling je ok pristup jer nam svakako nije u interesu da vrsimo migracije na svaki zahtev nego ih izvrsavamo u batchevima
  
 ## Osnovna podela
-
 - centralizovani (trust based)
-    - svoj kripto dajemo pod kontrolu nekome drugom ???bukvalno uplatimo ili ti verifikatori samo motre na adresu na koju smo uuplatili - dali su moguce obe opcije, da li ova druga opcija prelazi u smart contract tip???
+    - svoj kripto dajemo pod kontrolu nekome drugom (uplatimo na neciju adresu)
         - moramo im verovati
     - centralizovan pool
     - prednosti:
@@ -63,28 +60,25 @@
     - moze se kreirati federativna verzija koja se sastoji od vise notara, ali ni to nam mnogo ne garantuje
 
 - decentralizovani (trustless)
-    - ???koristi se smart contract u kome se zamrzavaju asseti i on minta ekvivalentne tokene na drugom chainu ???
-    - (nekad) skuplje, sporije 
-    - uvek imamo kontrolu nad nasim assetima
+    - u ovom smart contract poolu  ucestvuje vise korisnika
+        - nekada je implementiran i kao zeseban chain
+    - skuplje, sporije, ali pouzdanije
 
 
 ## Bridge vs Exchange
-
 - Exchange
-    - uplatim BTC na centralizovani exchange
-    - konvertujem ga u fiat valutu (stable coin)
+    - iz BTC walleta uplatim BTC na centralizovani exchange (Binance)
     - Kupim ETH 
-    - ???Posaljem ga sebi na ETH wallet???
+    - Posaljem ga sebi na ETH wallet
 
 - Bridge
-    - Preskace se medjukorak kupovine stablecoina
-    - pomocu neke od metoda ???(wrappovanje ili pool)??? direktno se prebacuje BTC to WBTC 
+    - pomocu neke od metoda direktno se (peer to peer) prebacuje npr. BTC u WBTC 
+        - nema posredovanja centralizovanog eniteta
 
 - U sustini:
-    - peer to peer umesto centrailizovanog modela
+    - peer to peer umesto centralizovanog modela
     - autonomija i privatnost korisnika
     - siri spektar podrzanih asseta
-    - kompleksniji
     - nekad fee za bridge nije toliko skup ako imamo 3 "interna" chainea koji su "brzo i jeftino" povezani
         - svaki ima neku svoju prednost, koji drugi nemaju
         - tada im je u interesu da se bridguju
@@ -110,8 +104,7 @@
 
 - mane:
     - moramo da verujemo notaru da nas ne prevari
-        - pokusaj resavanja pomocu federated bridges
-            - imamo grupu validatora, ali ne notara
+        - pokusaj resavanja pomocu federativnih notara
 
 ### Optimistic bridges
 
@@ -129,34 +122,43 @@
         - ovo su dobrovoljci
 
 
-### ???Zero knowledge bridge???
+### Zero knowledge bridge
+
+- neophodna je implementacija light client protokola
+    - povezuje se na full node-ove i tako omogucava interakciju sa chainom
 
 - zakljuca se token na A u contract
 - bridge generise ZKP (npr: ZK snarks)
+    - offchain
     - garantuje da je tx validna bez otkrivanja tajni tx
 - chain B prima ZKP i verifikuje ga 
 - Transfer se finalizuje od strane B
+
 
 #### Prednosti i mane
 
 - prednosti
     - privatnost zbog ZKP
     - efikasnost
-        - umesto da se cuvaju svi detalji transakcije chainovi samo rukuju sa ZKP 
-    - interoperabilnost
-        - detalji transakcije aptrahuju se u ZKP kojem se razlicite tehnologije lakse prilagodjavaju
-- mane
-    - velika kompleksnost
+        - umesto da se cuvaju svi detalji transakcije chainovi samo rukuju sa ZKP i headerima blokova
+    - mane
+        - velika kompleksnost
 
 
 ## Bezbednost
 
-## Ronin (614M)
+## Ronin (624M)
 
+- Mart 2022.
 - tokeni iz igrice su se prebacivali u druge valute
 - pokradeni su privatni kljucevi za autentifikacije transakcija
+    - slaba decentralizacija (9 validatora)
+    - slab monitoring (napad primecen tek nakon 6 dana)
 
-## (611M)
+## Poly (611M)
 
 - 2021
-- kasnije su vracene (napadac "je samo cuvao tudje pare da ih oni ne izgube")
+- Poly mreza
+- kasnije su vracene
+    - napadac "je samo cuvao tudje pare da ih oni ne izgube"
+        - napa ih je iz zabave, kao neki vid izazova

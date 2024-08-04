@@ -20,6 +20,8 @@
     - wrapped assets method
     - liquidity pool method
 - https://b2binpay.com/en/what-should-you-know-about-crypto-bridging/
+- https://www.halborn.com/blog/post/explained-the-ronin-hack-march-2022
+    - ronin
 
 ### Implementacije
 - https://medium.com/coinmonks/best-crypto-bridges-f3a4c68c5085 +
